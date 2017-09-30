@@ -2,14 +2,21 @@ import csv
 import random
 import sys
 
+"""
+
+CODE EDITED BY JACOB THOMAS FOR DIGITALRIVER'S HACKTOBERFEST 
+
+
+"""
+
 def load_teams(filename):
     """
     Reads teams from a CSV file,
     returns a multi-dimensional array of teams.
     Expects the CSV file to omit the header.
     """
-    teams = []
-    with open(filename) as f:
+    teams = [] #create a list of teams
+    with open(filename) as f:           #create file objects
         reader = csv.reader(f)
         for row in reader:
             teams.append(row)
@@ -17,7 +24,7 @@ def load_teams(filename):
 
 def make_game(teams, a, b, game_num, bye=False):
     team_a = "/".join(x.strip() for x in a)
-    team_b = "/".join(x.strip() for x in b) if len(b) > 1 else ""
+    team_b = "/".join(x.strip() for x in b) if len(b) >= 1 else ""
     return {
         "num": game_num,
         "a": team_a,
@@ -31,19 +38,19 @@ def first_round(teams):
     random.shuffle(teams)
 
     game_num = 1
-    scheduled_teams = 0
-    while scheduled_teams < len(teams) - 1:
+    scheduled_teams = 0  #iterator
+    while True:
+
+        if (len(teams) % 2 != 0) and (len(teams) - scheduled_teams == 1):
+            games.append(make_game(teams, teams[scheduled_teams], [], game_num, True))
+            break
+
         a = teams[scheduled_teams]
-        scheduled_teams += 1
-        b = teams[scheduled_teams]
-        scheduled_teams += 1
+        b = teams[scheduled_teams+1]
+        scheduled_teams += 2
         games.append(make_game(teams, a, b, game_num))
         game_num += 1
-        pass
 
-    # Handle odd number of teams with a bye
-    if len(teams) - scheduled_teams == 1:
-        games.append(make_game(teams, teams[scheduled_teams], [], game_num, True))
     return games
 
 def print_games(games):
@@ -57,7 +64,8 @@ def print_games(games):
 
 def main():
     if len(sys.argv) < 2:
-        raise "Please provide a CSV file as a CLI argument"
+        print "Please provide a CSV file as a CLI argument"
+        exit(0)
 
     teams = load_teams(sys.argv[1])
     if teams < 3:
