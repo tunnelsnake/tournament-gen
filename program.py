@@ -2,21 +2,14 @@ import csv
 import random
 import sys
 
-"""
-
-CODE EDITED BY JACOB THOMAS FOR DIGITALOCEAN'S HACKTOBERFEST 
-
-
-"""
-
 def load_teams(filename):
     """
     Reads teams from a CSV file,
     returns a multi-dimensional array of teams.
     Expects the CSV file to omit the header.
     """
-    teams = [] #create a list of teams
-    with open(filename) as f:           #create file objects
+    teams = [] 
+    with open(filename) as f: 
         reader = csv.reader(f)
         for row in reader:
             teams.append(row)
@@ -65,7 +58,7 @@ def print_games(games):
 def main():
     if len(sys.argv) < 2:
         print "Please provide a CSV file as a CLI argument"
-        exit(0)
+        exit(1)
 
     teams = load_teams(sys.argv[1])
     if teams < 3:
